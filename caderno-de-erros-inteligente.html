@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caderno de Erros Inteligente · Master5 OAB</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#15172B; --orange:#D7683D; --sky:#8896BE; --sand:#E8A062; --paper:#F3F1EF;
+  --white:#FFFFFF; --ink:#15172B; --muted:#5d6077; --line:#dcd8d3;
+  --sky-soft:#e7eaf3; --sand-soft:#f8e8d6; --orange-soft:#f6e0d6;
+  --serif:"Georgia Pro", Georgia, "Times New Roman", serif;
+  --sans:"Poppins", system-ui, sans-serif;
+  --hand:"Caveat", cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.55;min-height:100vh}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 96px}
+
+/* Cabeçalho */
+header{padding:28px 0 18px;display:flex;gap:14px;align-items:center}
+header svg{flex:0 0 52px}
+.brand small{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.brand h1{font-family:var(--serif);font-weight:normal;font-size:clamp(24px,5.6vw,32px);line-height:1.15}
+.hl{background:linear-gradient(transparent 58%, rgba(232,160,98,.55) 58%);padding:0 2px}
+.tagline{font-family:var(--hand);color:var(--orange);font-size:22px;margin:-4px 0 18px;transform:rotate(-1deg);display:inline-block}
+
+/* Abas */
+nav{position:sticky;top:0;z-index:10;background:var(--paper);padding:8px 0;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto}
+nav button{flex:1 0 auto;background:none;border:1px solid transparent;border-radius:999px;padding:8px 14px;cursor:pointer;font-weight:500;color:var(--muted);white-space:nowrap}
+nav button.on{background:var(--navy);color:var(--paper)}
+.badge{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:999px;background:var(--orange);color:#fff;font-size:12px;line-height:20px;text-align:center}
+section{display:none;padding-top:22px}
+section.on{display:block}
+
+/* Cartões e formulários */
+.card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
+h2{font-family:var(--serif);font-weight:normal;font-size:23px;margin-bottom:6px}
+h3{font-size:15px;font-weight:600;margin-bottom:8px}
+.sub{color:var(--muted);font-size:14px;margin-bottom:16px}
+label{display:block;font-weight:500;font-size:14px;margin:14px 0 6px}
+label em{font-style:normal;color:var(--muted);font-weight:400}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--sky);background:#fff}
+textarea{min-height:78px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+
+.tipos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:560px){.tipos{grid-template-columns:1fr}}
+.tipo{border:1.5px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;background:var(--paper)}
+.tipo b{display:block;font-size:14px}
+.tipo span{font-size:12.5px;color:var(--muted)}
+.tipo.on{border-color:var(--navy);background:#fff}
+.tipo.on b{color:var(--orange)}
+.falta{border-color:var(--orange)!important;background:var(--orange-soft)!important}
+.tipos.falta{border:1.5px dashed var(--orange);border-radius:14px;padding:4px}
+.prescricao{display:none;margin-top:12px;padding:12px 14px;border-left:3px solid var(--orange);background:var(--orange-soft);border-radius:0 10px 10px 0;font-size:14px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:10px;padding:12px 18px;font-weight:600;cursor:pointer}
+.btn-main{background:var(--orange);color:#fff}
+.btn-dark{background:var(--navy);color:var(--paper)}
+.btn-ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.btn-full{width:100%;margin-top:18px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btns .btn{flex:1}
+
+/* Como usar */
+details.how{background:var(--sky-soft);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+details.how summary{cursor:pointer;font-weight:600}
+details.how ol{margin:10px 0 0 18px;font-size:14px}
+details.how li{margin-bottom:6px}
+
+/* Revisão */
+.flash{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;position:relative}
+.flash .meta{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.flash .gatilho{font-family:var(--serif);font-size:21px;line-height:1.35;margin-bottom:6px}
+.flash .hint{font-family:var(--hand);font-size:20px;color:var(--sky)}
+.resposta{display:none;margin-top:18px;padding-top:16px;border-top:1px dashed var(--line)}
+.resposta .regra{background:var(--sand-soft);border-radius:10px;padding:12px 14px;margin:6px 0 12px}
+.resposta small{display:block;color:var(--muted);font-size:13px}
+.progress{height:6px;background:var(--line);border-radius:999px;margin-bottom:14px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--orange);width:0}
+.stage{font-size:13px;color:var(--muted);margin-bottom:10px}
+
+/* Lista */
+.filtros{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:14px}
+@media(max-width:560px){.filtros{grid-template-columns:1fr}}
+.item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.chip{font-size:11.5px;font-weight:500;padding:2px 9px;border-radius:999px;background:var(--sky-soft);color:var(--navy)}
+.chip.c-conteudo{background:var(--orange-soft);color:#9b4320}
+.chip.c-interpretacao{background:var(--sky-soft);color:#3c4a78}
+.chip.c-pressa{background:var(--sand-soft);color:#8a5418}
+.chip.ok{background:var(--navy);color:var(--paper)}
+.item .tema{font-weight:600}
+.item p{font-size:14px;color:var(--muted)}
+.item .acoes{display:flex;gap:14px;margin-top:8px}
+.link{background:none;border:none;color:var(--orange);font-weight:500;cursor:pointer;font-size:13.5px;padding:0}
+.link.del{color:var(--muted)}
+
+/* Raio-x */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.stat b{display:block;font-family:var(--serif);font-size:28px;font-weight:normal}
+.stat span{font-size:12px;color:var(--muted)}
+.bar{margin-bottom:10px}
+.bar .lbl{display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:4px}
+.bar .trk{height:9px;background:var(--paper);border-radius:999px;overflow:hidden}
+.bar .trk i{display:block;height:100%;background:var(--navy);border-radius:999px}
+.bar.top .trk i{background:var(--orange)}
+.diag{background:var(--navy);color:var(--paper);border-radius:14px;padding:20px;margin-bottom:16px}
+.diag h3{color:var(--sand)}
+.diag p{font-size:14.5px}
+.vazio{text-align:center;padding:34px 18px;color:var(--muted)}
+.vazio .hand{font-family:var(--hand);font-size:26px;color:var(--orange);display:block;margin-bottom:6px}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--navy);color:var(--paper);padding:12px 18px;border-radius:10px;font-size:14px;transition:transform .25s;z-index:50;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.salvo{font-size:12.5px;color:var(--muted);padding:8px 2px 0;transition:color .3s}
+.salvo.flash{color:var(--orange)}
+.aviso{display:none;background:var(--sand-soft);border:1px solid var(--sand);border-radius:12px;padding:14px 16px;margin-top:14px;font-size:14px}
+.aviso p{margin-bottom:10px}
+.aviso .btn{padding:9px 14px}
+footer{text-align:center;font-size:12.5px;color:var(--muted);margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <svg viewBox="0 0 64 64" width="52" height="52" aria-label="Logo Master5 OAB">
+    <circle cx="32" cy="34" r="28" fill="none" stroke="#D7683D" stroke-width="3" stroke-dasharray="148 28" transform="rotate(-62 32 34)"/>
+    <ellipse cx="27" cy="10" rx="6" ry="3" fill="#D7683D" transform="rotate(-25 27 10)"/>
+    <ellipse cx="37" cy="10" rx="6" ry="3" fill="#D7683D" transform="rotate(25 37 10)"/>
+    <circle cx="32" cy="35" r="21" fill="#D7683D"/>
+    <g stroke="#15172B" stroke-width="6" stroke-linecap="round">
+      <line x1="23" y1="26" x2="41" y2="44"/><line x1="41" y1="26" x2="23" y2="44"/>
+    </g>
+    <circle cx="32" cy="35" r="3" fill="#F3F1EF"/>
+    <g stroke="#F3F1EF" stroke-width="1.6" stroke-linecap="round">
+      <line x1="32" y1="22" x2="32" y2="26"/><line x1="32" y1="44" x2="32" y2="48"/>
+      <line x1="19" y1="35" x2="23" y2="35"/><line x1="41" y1="35" x2="45" y2="35"/>
+    </g>
+  </svg>
+  <div class="brand">
+    <small>Master5 OAB · 1ª fase</small>
+    <h1>Caderno de Erros <span class="hl">Inteligente</span></h1>
+  </div>
+</header>
+<span class="tagline">acerte mais questões ✓</span>
+
+<nav>
+  <button data-tab="registrar" class="on">Registrar erro</button>
+  <button data-tab="revisar">Revisar hoje<span class="badge" id="badge">0</span></button>
+  <button data-tab="caderno">Meu caderno</button>
+  <button data-tab="raiox">Raio-x</button>
+</nav>
+<div class="salvo" id="salvo">✓ Progresso salvo automaticamente neste aparelho</div>
+<div class="aviso" id="avisoBackup">
+  <p id="avisoTexto"></p>
+  <div class="btns">
+    <button class="btn btn-main" type="button" onclick="exportar()">Salvar cópia agora</button>
+    <button class="btn btn-ghost" type="button" onclick="adiarAviso()">Depois</button>
+  </div>
+</div>
+
+<!-- REGISTRAR -->
+<section id="registrar" class="on">
+  <details class="how">
+    <summary>Como usar o seu caderno (leia uma vez)</summary>
+    <ol>
+      <li>Errou uma questão? Registre aqui na hora, e não só a resposta certa: escreva a <b>regra</b> com as suas palavras.</li>
+      <li>Diga <b>por que</b> errou: conteúdo, interpretação ou pressa. Cada tipo de erro tem um remédio diferente.</li>
+      <li>O caderno marca sozinho as revisões (amanhã, em 7 dias e em 30 dias). É só abrir a aba <b>Revisar hoje</b>.</li>
+      <li>Na revisão, tente lembrar a regra <b>antes</b> de ver a resposta. Esse esforço é o que fixa.</li>
+      <li>Toda semana, olhe o <b>Raio-x</b>: ele mostra onde você está perdendo pontos.</li>
+      <li>Seu progresso salva sozinho neste aparelho. Use sempre o <b>mesmo celular e o mesmo navegador</b>, e salve uma cópia pelo Raio-x uma vez por semana.</li>
+      <li><b>No iPhone:</b> toque em Compartilhar e depois em "Adicionar à Tela de Início". Assim o caderno vira um app e o Safari não apaga seus dados se você ficar uns dias sem abrir.</li>
+    </ol>
+  </details>
+
+  <form class="card" id="form">
+    <h2 id="formTitulo">Novo erro</h2>
+    <p class="sub">Erro registrado é ponto recuperado na prova.</p>
+
+    <div class="row">
+      <div>
+        <label for="materia">Matéria</label>
+        <select id="materia" required></select>
+      </div>
+      <div>
+        <label for="tema">Tema <em>(assunto)</em></label>
+        <input id="tema" placeholder="Ex.: Prescrição tributária" required>
+      </div>
+    </div>
+
+    <label for="pergunta">O que a questão cobrou? <em>(vira a pergunta da revisão)</em></label>
+    <input id="pergunta" placeholder="Ex.: Qual o prazo para a Fazenda cobrar o crédito tributário?">
+
+    <label for="regra">A regra certa, com as minhas palavras</label>
+    <textarea id="regra" placeholder="Ex.: A Fazenda tem 5 anos, contados da constituição definitiva do crédito, para cobrar." required></textarea>
+
+    <label for="artigo">Artigo <em>(opcional)</em></label>
+    <input id="artigo" placeholder="Ex.: art. 174, CTN">
+
+    <label>Por que eu errei?</label>
+    <div class="tipos" id="tipos">
+      <div class="tipo" data-tipo="conteudo"><b>Conteúdo</b><span>Eu não sabia ou não lembrava a regra.</span></div>
+      <div class="tipo" data-tipo="interpretacao"><b>Interpretação</b><span>Eu sabia, mas li errado o enunciado ou a alternativa.</span></div>
+      <div class="tipo" data-tipo="pressa"><b>Pressa</b><span>Eu sabia, mas marquei rápido demais.</span></div>
+    </div>
+    <div class="prescricao" id="prescricao"></div>
+
+    <button class="btn btn-main btn-full" type="button" id="btnSalvar">Salvar no caderno</button>
+    <button class="btn btn-ghost btn-full" type="button" id="btnCancelar" style="display:none;margin-top:8px">Cancelar edição</button>
+  </form>
+</section>
+
+<!-- REVISAR -->
+<section id="revisar">
+  <h2>Revisão de hoje</h2>
+  <p class="sub">Tente lembrar a regra antes de abrir a resposta. Se doeu um pouquinho para lembrar, está funcionando.</p>
+  <div id="revisaoBox"></div>
+</section>
+
+<!-- CADERNO -->
+<section id="caderno">
+  <h2>Meu caderno</h2>
+  <p class="sub">Todos os seus erros, organizados e com a próxima revisão marcada.</p>
+  <div class="card">
+    <h3>Baixar o meu caderno</h3>
+    <p class="sub" style="margin-bottom:12px">Para imprimir, estudar no papel ou organizar no computador. O arquivo segue os filtros abaixo: escolha uma matéria para baixar só ela.</p>
+    <div class="btns">
+      <button class="btn btn-dark" type="button" id="btnPDF">Baixar em PDF</button>
+      <button class="btn btn-ghost" type="button" id="btnXLSX">Baixar planilha Excel</button>
+    </div>
+    <button class="link" type="button" id="btnModelo" style="margin-top:14px">Prefere o papel? Baixe o modelo em branco para imprimir (PDF)</button>
+  </div>
+  <div class="filtros">
+    <input id="busca" placeholder="Buscar por tema, regra ou artigo">
+    <select id="fMateria"></select>
+    <select id="fTipo">
+      <option value="">Todos os tipos</option>
+      <option value="conteudo">Conteúdo</option>
+      <option value="interpretacao">Interpretação</option>
+      <option value="pressa">Pressa</option>
+    </select>
+  </div>
+  <div id="lista"></div>
+</section>
+
+<!-- RAIO-X -->
+<section id="raiox">
+  <h2>Raio-x dos seus erros</h2>
+  <p class="sub">Erro não é fracasso, é mapa. Aqui está o seu.</p>
+  <div id="raioxBox"></div>
+  <div class="card">
+    <h3>Backup do caderno</h3>
+    <p class="sub" style="margin-bottom:12px">Seu caderno fica salvo neste navegador. Faça um backup de vez em quando ou para levar para outro aparelho.</p>
+    <div class="btns">
+      <button class="btn btn-dark" id="btnExport" type="button">Baixar backup</button>
+      <button class="btn btn-ghost" id="btnImport" type="button">Restaurar backup</button>
+    </div>
+    <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
+  </div>
+</section>
+
+<footer>Master5 OAB · @sabrinedireito · "Quem erra mais, aprende mais."</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY = 'master5_caderno_erros_v1';
+const MATERIAS = [
+  'Ética Profissional','Filosofia do Direito','Direito Constitucional','Direitos Humanos',
+  'Direito Eleitoral','Direito Internacional','Direito Financeiro','Direito Tributário',
+  'Direito Administrativo','Direito Ambiental','Direito Civil','ECA',
+  'Direito do Consumidor','Direito Empresarial','Processo Civil','Direito Penal',
+  'Processo Penal','Direito Previdenciário','Direito do Trabalho','Processo do Trabalho'
+];
+const TIPOS = {
+  conteudo:{nome:'Conteúdo', remedio:'Volte à lei seca desse artigo hoje e releia o entorno dele. Esse erro vai voltar para você em forma de pergunta até virar memória.'},
+  interpretacao:{nome:'Interpretação', remedio:'O problema não foi a matéria, foi a leitura. Na próxima questão, comece pelo enunciado: grife o comando (correta, incorreta, exceto) antes de olhar as alternativas.'},
+  pressa:{nome:'Pressa', remedio:'Esse ponto já era seu. Na prova, leia todas as alternativas antes de marcar, mesmo quando a primeira parecer certa.'}
+};
+const INTERVALOS = [1, 7, 30];
+
+let db = carregar();
+let editando = null;
+let tipoSel = '';
+let fila = [], pos = 0;
+
+function carregar(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } }
+function salvar(){
+  const s = document.getElementById('salvo');
+  try{
+    localStorage.setItem(KEY, JSON.stringify(db));
+    s.textContent = '✓ Progresso salvo às ' + new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) + ' neste aparelho';
+    s.classList.add('flash'); setTimeout(()=>s.classList.remove('flash'), 1200);
+  }catch(e){
+    s.textContent = '⚠ Este navegador não está guardando seus dados (aba anônima ou pré-visualização). Abra o caderno pelo link normal para o progresso ficar salvo.';
+    toast('Registrado, mas este navegador não guarda os dados. Abra pelo link normal do caderno.');
+  }
+  verificarAviso();
+}
+/* Pede ao navegador para não apagar os dados sozinho */
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
+
+/* Lembrete semanal de cópia de segurança */
+function lerNum(k){ try{ return Number(localStorage.getItem(k)) || 0; }catch(e){ return 0; } }
+function gravarNum(k,v){ try{ localStorage.setItem(k, String(v)); }catch(e){} }
+function verificarAviso(){
+  const box = document.getElementById('avisoBackup');
+  const ultimo = lerNum(KEY+'_backup'), adiado = lerNum(KEY+'_adiado'), agora = Date.now(), DIA = 864e5;
+  const precisa = db.length >= 5 && (agora - ultimo) > 7*DIA && (agora - adiado) > DIA;
+  if(precisa){
+    document.getElementById('avisoTexto').innerHTML = ultimo
+      ? `Já faz ${Math.floor((agora-ultimo)/DIA)} dias desde a sua última cópia. Seus <b>${db.length} erros</b> são ouro: salve uma cópia para não perder nada se trocar de celular ou limpar o navegador.`
+      : `Você já tem <b>${db.length} erros</b> no caderno. Salve uma cópia de segurança: se trocar de celular ou limpar o navegador, é ela que traz tudo de volta.`;
+  }
+  box.style.display = precisa ? 'block' : 'none';
+}
+function adiarAviso(){ gravarNum(KEY+'_adiado', Date.now()); verificarAviso(); }
+const pad = n => String(n).padStart(2,'0');
+function hoje(){ const d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function addDias(s,n){ const d=new Date(s+'T12:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function br(s){ if(!s) return ''; const [y,m,d]=s.split('-'); return d+'/'+m; }
+function esc(s){ return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600); }
+const pendentes = () => db.filter(e => !e.dominado && e.proxima <= hoje());
+
+/* Abas */
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => abrir(b.dataset.tab));
+function abrir(tab){
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.tab===tab));
+  document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id===tab));
+  if(tab==='revisar') iniciarRevisao();
+  if(tab==='caderno') renderLista();
+  if(tab==='raiox') renderRaiox();
+  window.scrollTo({top:0});
+}
+function atualizarBadge(){ const n=pendentes().length; const b=document.getElementById('badge'); b.textContent=n; b.style.display=n?'inline-block':'none'; }
+
+/* Formulário */
+const selMat = document.getElementById('materia');
+selMat.innerHTML = '<option value="">Escolha a matéria</option>' + MATERIAS.map(m=>`<option>${m}</option>`).join('');
+document.getElementById('fMateria').innerHTML = '<option value="">Todas as matérias</option>' + MATERIAS.map(m=>`<option>${m}</option>`).join('');
+
+document.querySelectorAll('.tipo').forEach(el => el.onclick = () => marcarTipo(el.dataset.tipo));
+function marcarTipo(t){
+  tipoSel = t;
+  if(t) document.getElementById('tipos').classList.remove('falta');
+  document.querySelectorAll('.tipo').forEach(el => el.classList.toggle('on', el.dataset.tipo===t));
+  const p = document.getElementById('prescricao');
+  if(t){ p.innerHTML = '<b>O que fazer agora:</b> ' + TIPOS[t].remedio; p.style.display='block'; } else p.style.display='none';
+}
+
+const campos = ['materia','tema','pergunta','regra','artigo'];
+const OBRIG = {materia:'a matéria', tema:'o tema', regra:'a regra certa'};
+document.getElementById('form').addEventListener('submit', ev => { ev.preventDefault(); salvarErro(); });
+document.getElementById('btnSalvar').addEventListener('click', ev => { ev.preventDefault(); salvarErro(); });
+campos.forEach(c => document.getElementById(c).addEventListener('input', ev => ev.target.classList.remove('falta')));
+function salvarErro(){
+  const dados = {}; campos.forEach(c => dados[c] = document.getElementById(c).value.trim());
+  const faltando = Object.keys(OBRIG).filter(c => !dados[c]);
+  faltando.forEach(c => document.getElementById(c).classList.add('falta'));
+  if(faltando.length){
+    toast('Falta preencher ' + faltando.map(c=>OBRIG[c]).join(', ') + '.');
+    document.getElementById(faltando[0]).focus(); return;
+  }
+  if(!tipoSel){
+    document.getElementById('tipos').classList.add('falta');
+    toast('Marque por que você errou. É isso que deixa o caderno inteligente.'); return;
+  }
+  if(editando){
+    Object.assign(db.find(e=>e.id===editando), dados, {tipo:tipoSel});
+    toast('Erro atualizado.');
+  } else {
+    db.unshift(Object.assign({ id:Date.now().toString(36), tipo:tipoSel, criado:hoje(), etapa:0,
+      proxima:addDias(hoje(),INTERVALOS[0]), dominado:false, reincidencias:0 }, dados));
+    toast('Salvo! A primeira revisão é amanhã.');
+  }
+  salvar(); limparForm(); atualizarBadge();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.getElementById('btnCancelar').onclick = limparForm;
+function limparForm(){
+  editando=null; document.getElementById('form').reset(); marcarTipo('');
+  document.getElementById('formTitulo').textContent='Novo erro';
+  document.getElementById('btnSalvar').textContent='Salvar no caderno';
+  document.getElementById('btnCancelar').style.display='none';
+}
+function editar(id){
+  const e = db.find(x=>x.id===id); if(!e) return;
+  editando=id; campos.forEach(c => document.getElementById(c).value = e[c]||''); marcarTipo(e.tipo);
+  document.getElementById('formTitulo').textContent='Editar erro';
+  document.getElementById('btnSalvar').textContent='Salvar alterações';
+  document.getElementById('btnCancelar').style.display='flex';
+  abrir('registrar');
+}
+function excluir(id){
+  if(!confirm('Excluir este erro do caderno?')) return;
+  db = db.filter(e=>e.id!==id); salvar(); renderLista(); atualizarBadge();
+}
+
+/* Revisão por evocação */
+function iniciarRevisao(){ fila = pendentes(); pos = 0; renderRevisao(); }
+function renderRevisao(){
+  const box = document.getElementById('revisaoBox');
+  if(!db.length){ box.innerHTML = `<div class="card vazio"><span class="hand">seu caderno está em branco</span>Registre o primeiro erro e ele volta aqui amanhã, na hora certa.</div>`; return; }
+  if(pos >= fila.length){
+    const prox = db.filter(e=>!e.dominado).map(e=>e.proxima).sort()[0];
+    box.innerHTML = `<div class="card vazio"><span class="hand">${fila.length ? 'revisão do dia feita!' : 'nada para revisar hoje'}</span>
+      ${prox ? 'Sua próxima revisão é em <b>'+br(prox)+'</b>.' : 'Todos os seus erros estão dominados. Bora resolver mais questões!'}</div>`;
+    atualizarBadge(); return;
+  }
+  const e = fila[pos];
+  box.innerHTML = `
+    <div class="progress"><i style="width:${(pos/fila.length)*100}%"></i></div>
+    <div class="stage">Cartão ${pos+1} de ${fila.length} · Revisão ${e.etapa+1} de 3</div>
+    <div class="flash">
+      <div class="meta">${esc(e.materia)} · ${esc(e.tema)}</div>
+      <div class="gatilho">${esc(e.pergunta || 'Qual é a regra sobre: ' + e.tema + '?')}</div>
+      <span class="hint">responda em voz alta antes de abrir</span>
+      <div class="resposta" id="resp">
+        <small>A regra certa</small>
+        <div class="regra">${esc(e.regra)}${e.artigo ? '<br><b>'+esc(e.artigo)+'</b>' : ''}</div>
+        <span class="chip c-${e.tipo}">Erro de ${TIPOS[e.tipo].nome.toLowerCase()}</span>
+      </div>
+    </div>
+    <button class="btn btn-dark btn-full" id="btnMostrar">Mostrar a regra</button>
+    <div class="btns" id="btnsResp" style="display:none;margin-top:18px">
+      <button class="btn btn-ghost" id="btnErrei">Ainda errei</button>
+      <button class="btn btn-main" id="btnLembrei">Lembrei certinho</button>
+    </div>`;
+  document.getElementById('btnMostrar').onclick = () => {
+    document.getElementById('resp').style.display='block';
+    document.getElementById('btnMostrar').style.display='none';
+    document.getElementById('btnsResp').style.display='flex';
+  };
+  document.getElementById('btnLembrei').onclick = () => responder(e,true);
+  document.getElementById('btnErrei').onclick = () => responder(e,false);
+}
+function responder(e, acertou){
+  const item = db.find(x=>x.id===e.id);
+  if(acertou){
+    item.etapa++;
+    if(item.etapa >= INTERVALOS.length){ item.dominado=true; item.proxima=null; toast('Dominado! Esse ponto agora é seu.'); }
+    else item.proxima = addDias(hoje(), INTERVALOS[item.etapa]);
+  } else {
+    item.etapa=0; item.reincidencias=(item.reincidencias||0)+1; item.proxima=addDias(hoje(),INTERVALOS[0]);
+    toast('Sem problema: ele volta amanhã. Repetição é o caminho.');
+  }
+  salvar(); pos++; renderRevisao();
+}
+
+/* Lista */
+['busca','fMateria','fTipo'].forEach(id => document.getElementById(id).addEventListener('input', renderLista));
+function filtrar(){
+  const q = document.getElementById('busca').value.toLowerCase();
+  const fm = document.getElementById('fMateria').value, ft = document.getElementById('fTipo').value;
+  return db.filter(e => (!fm||e.materia===fm) && (!ft||e.tipo===ft) &&
+    (!q || [e.tema,e.regra,e.artigo,e.pergunta,e.materia].join(' ').toLowerCase().includes(q)));
+}
+function renderLista(){
+  const itens = filtrar();
+  const box = document.getElementById('lista');
+  if(!itens.length){ box.innerHTML = `<div class="card vazio"><span class="hand">${db.length?'nada encontrado':'nenhum erro ainda'}</span>${db.length?'Tente outro filtro.':'Quem erra mais, aprende mais. Comece registrando o primeiro.'}</div>`; return; }
+  box.innerHTML = itens.map(e => `
+    <div class="item">
+      <div class="chips">
+        <span class="chip">${esc(e.materia)}</span>
+        <span class="chip c-${e.tipo}">${TIPOS[e.tipo].nome}</span>
+        ${e.dominado ? '<span class="chip ok">Dominado</span>' : '<span class="chip">Revisão '+(e.etapa+1)+'/3 · '+(e.proxima<=hoje()?'hoje':br(e.proxima))+'</span>'}
+        ${e.reincidencias ? '<span class="chip c-conteudo">Errou de novo '+e.reincidencias+'x</span>' : ''}
+      </div>
+      <div class="tema">${esc(e.tema)}</div>
+      <p>${esc(e.regra)}${e.artigo?' · <b>'+esc(e.artigo)+'</b>':''}</p>
+      <div class="acoes"><button class="link" onclick="editar('${e.id}')">Editar</button><button class="link del" onclick="excluir('${e.id}')">Excluir</button></div>
+    </div>`).join('');
+}
+
+/* Raio-x */
+function contar(arr, fn){ const m={}; arr.forEach(x=>{const k=fn(x); m[k]=(m[k]||0)+1;}); return Object.entries(m).sort((a,b)=>b[1]-a[1]); }
+function barras(lista, max, destaque){
+  return lista.map(([k,v],i)=>`<div class="bar ${destaque&&i===0?'top':''}"><div class="lbl"><span>${esc(k)}</span><b>${v}</b></div><div class="trk"><i style="width:${(v/max)*100}%"></i></div></div>`).join('');
+}
+function renderRaiox(){
+  const box = document.getElementById('raioxBox');
+  if(!db.length){ box.innerHTML = `<div class="card vazio"><span class="hand">seu raio-x aparece aqui</span>Registre alguns erros e eu mostro onde estão os pontos que você está deixando na prova.</div>`; return; }
+  const dom = db.filter(e=>e.dominado).length;
+  const porMat = contar(db, e=>e.materia).slice(0,8);
+  const porTipo = contar(db, e=>TIPOS[e.tipo].nome);
+  const temas = contar(db, e=>e.materia+' · '+e.tema).filter(t=>t[1]>1).slice(0,5);
+  const reinc = db.filter(e=>e.reincidencias>0).sort((a,b)=>b.reincidencias-a.reincidencias).slice(0,5);
+  const tipoTop = contar(db, e=>e.tipo)[0][0], matTop = porMat[0][0];
+  const diag = {
+    conteudo:`Seu maior vilão hoje é a <b>base de conteúdo</b>, principalmente em <b>${esc(matTop)}</b>. Na próxima semana, dê prioridade à leitura da legislação esquematizada dessa matéria antes de partir para as questões.`,
+    interpretacao:`Você sabe mais do que acerta. A FGV está te pegando no <b>enunciado</b>. Antes de ler as alternativas, grife o comando da questão e as palavras como "exceto", "incorreta" e "sempre". A matéria em que isso mais acontece é <b>${esc(matTop)}</b>.`,
+    pressa:`Você está deixando na prova pontos que <b>já são seus</b>. O ajuste é de comportamento, não de matéria: leia as quatro alternativas antes de marcar e desconfie da primeira que "parece certa".`
+  }[tipoTop];
+  box.innerHTML = `
+    <div class="stats">
+      <div class="stat"><b>${db.length}</b><span>erros registrados</span></div>
+      <div class="stat"><b>${dom}</b><span>já dominados</span></div>
+      <div class="stat"><b>${pendentes().length}</b><span>para revisar hoje</span></div>
+    </div>
+    <div class="diag"><h3>Diagnóstico da semana</h3><p>${diag}</p></div>
+    <div class="card"><h3>Onde você mais erra</h3>${barras(porMat, porMat[0][1], true)}</div>
+    <div class="card"><h3>Por que você erra</h3>${barras(porTipo, porTipo[0][1], true)}</div>
+    ${temas.length ? `<div class="card"><h3>Temas que se repetem</h3><p class="sub" style="margin-bottom:10px">Se apareceu mais de uma vez no seu caderno, a FGV sabe que você tropeça aqui.</p>${barras(temas, temas[0][1])}</div>` : ''}
+    ${reinc.length ? `<div class="card"><h3>Pontos teimosos</h3><p class="sub" style="margin-bottom:10px">Erros que voltaram na revisão. Vale reescrever a regra de outro jeito ou fazer um esquema.</p>${reinc.map(e=>`<p style="margin-bottom:6px">• <b>${esc(e.tema)}</b> <span style="color:var(--muted)">(${esc(e.materia)}, ${e.reincidencias}x)</span></p>`).join('')}</div>` : ''}`;
+}
+
+/* Backup */
+function exportar(){
+  const blob = new Blob([JSON.stringify(db,null,2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'caderno-de-erros-'+hoje()+'.json'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  gravarNum(KEY+'_backup', Date.now()); verificarAviso();
+  toast('Cópia salva! Guarde o arquivo no Drive ou no WhatsApp.');
+}
+document.getElementById('btnExport').onclick = exportar;
+document.getElementById('btnImport').onclick = () => document.getElementById('fileImport').click();
+document.getElementById('fileImport').onchange = ev => {
+  const f = ev.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const dados = JSON.parse(r.result); if(!Array.isArray(dados)) throw 0;
+      if(!confirm('Restaurar este backup? O caderno atual será substituído.')) return;
+      db = dados; salvar(); atualizarBadge(); renderRaiox(); toast('Backup restaurado.');
+    }catch(e){ toast('Esse arquivo não parece um backup do caderno.'); }
+  };
+  r.readAsText(f); ev.target.value='';
+};
+
+/* ===== Exportar PDF / Excel ===== */
+const LIBS = {
+  pdf:['https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+       'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js'],
+  xlsx:['https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js']
+};
+const carregados = {};
+function carregarScript(src){
+  if(carregados[src]) return carregados[src];
+  return carregados[src] = new Promise((ok, falha) => {
+    const s = document.createElement('script'); s.src = src;
+    s.onload = ok; s.onerror = () => { delete carregados[src]; falha(); };
+    document.head.appendChild(s);
+  });
+}
+async function libs(nome){
+  try{ for(const s of LIBS[nome]) await carregarScript(s); return true; }
+  catch(e){ toast('Não consegui gerar o arquivo. Confira sua internet e tente de novo.'); return false; }
+}
+function dataBR(s){ if(!s) return '-'; const [y,m,d]=s.split('-'); return d+'/'+m+'/'+y; }
+const statusTxt = e => e.dominado ? 'Dominado' : 'Revisão '+(e.etapa+1)+' de 3 (próx. '+br(e.proxima)+')';
+const NAVY=[21,23,43], ORANGE=[215,104,61], SAND=[232,160,98], SANDSOFT=[248,232,214], LINE=[220,216,211];
+
+function cabecalhoPDF(doc, titulo, sub){
+  const W = doc.internal.pageSize.getWidth();
+  doc.setFillColor(...NAVY); doc.rect(0,0,W,20,'F');
+  doc.setFillColor(...ORANGE); doc.rect(0,20,W,1.2,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...SAND);
+  doc.text('MASTER5 OAB  ·  1ª FASE', 12, 8);
+  doc.setFont('times','normal'); doc.setFontSize(16); doc.setTextColor(243,241,239);
+  doc.text(titulo, 12, 15.5);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(200,203,220);
+  doc.text(sub, W-12, 15.5, {align:'right'});
+}
+function rodapePDF(doc, legenda){
+  const n = doc.getNumberOfPages(), W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+  for(let i=1;i<=n;i++){
+    doc.setPage(i);
+    doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(93,96,119);
+    if(legenda) doc.text(legenda, 12, H-11, {maxWidth: W-50});
+    doc.text('@sabrinedireito  ·  "Quem erra mais, aprende mais."', 12, H-6);
+    doc.text('Página '+i+' de '+n, W-12, H-6, {align:'right'});
+  }
+}
+
+async function baixarPDF(){
+  const itens = filtrar();
+  if(!itens.length){ toast(db.length ? 'Nenhum erro com esse filtro.' : 'Registre seus erros primeiro, ou baixe o modelo em branco.'); return; }
+  toast('Gerando seu PDF...');
+  if(!(await libs('pdf'))) return;
+  const doc = new window.jspdf.jsPDF({orientation:'landscape', unit:'mm', format:'a4'});
+  const sub = itens.length+' erros  ·  gerado em '+dataBR(hoje());
+  cabecalhoPDF(doc, 'Meu Caderno de Erros', sub);
+  let y = 28;
+  MATERIAS.forEach(mat => {
+    const doMat = itens.filter(e => e.materia === mat);
+    if(!doMat.length) return;
+    doc.autoTable({
+      startY: y, margin:{top:28, left:12, right:12, bottom:18},
+      head:[[{content: mat+'  ('+doMat.length+')', colSpan:6, styles:{fillColor:NAVY, textColor:[243,241,239], fontSize:10, fontStyle:'bold'}}],
+            ['Tema','O que a questão cobrou','Regra certa, com as minhas palavras','Artigo','Tipo de erro','Status']],
+      body: doMat.map(e => [e.tema, e.pergunta||'', e.regra, e.artigo||'', TIPOS[e.tipo].nome, statusTxt(e)]),
+      theme:'grid',
+      styles:{font:'helvetica', fontSize:8.3, cellPadding:2, textColor:NAVY, lineColor:LINE, lineWidth:.2, overflow:'linebreak', valign:'top'},
+      headStyles:{fillColor:SANDSOFT, textColor:NAVY, fontStyle:'bold'},
+      columnStyles:{0:{cellWidth:36, fontStyle:'bold'},1:{cellWidth:62},2:{cellWidth:103, fillColor:[253,247,240]},3:{cellWidth:26},4:{cellWidth:22},5:{cellWidth:24}},
+      rowPageBreak:'avoid',
+      didDrawPage: () => cabecalhoPDF(doc, 'Meu Caderno de Erros', sub)
+    });
+    y = doc.lastAutoTable.finalY + 7;
+  });
+  rodapePDF(doc);
+  doc.save('meu-caderno-de-erros-'+hoje()+'.pdf');
+}
+
+async function baixarModelo(){
+  toast('Gerando o modelo...');
+  if(!(await libs('pdf'))) return;
+  const doc = new window.jspdf.jsPDF({orientation:'landscape', unit:'mm', format:'a4'});
+  const sub = 'Nome: ______________________________';
+  cabecalhoPDF(doc, 'Caderno de Erros Inteligente', sub);
+  doc.autoTable({
+    startY: 28, margin:{top:28, left:12, right:12, bottom:22},
+    head:[['Data','Matéria e tema','O que a questão cobrou','Regra certa, com as minhas palavras','Tipo\n(C / I / P)','Revisões\n1 · 7 · 30 dias']],
+    body: Array.from({length:30}, () => ['','','','','','']),
+    showHead:'everyPage', theme:'grid',
+    styles:{font:'helvetica', fontSize:8.5, cellPadding:2, textColor:NAVY, lineColor:LINE, lineWidth:.25, minCellHeight:13},
+    headStyles:{fillColor:NAVY, textColor:[243,241,239], fontStyle:'bold', minCellHeight:10, valign:'middle'},
+    columnStyles:{0:{cellWidth:18},1:{cellWidth:45},2:{cellWidth:62},3:{cellWidth:96, fillColor:[253,247,240]},4:{cellWidth:20},5:{cellWidth:32}},
+    didDrawCell: d => {
+      if(d.section==='body' && d.column.index===5){
+        const lado=5, gap=4, total=lado*3+gap*2, x0=d.cell.x+(d.cell.width-total)/2, y0=d.cell.y+(d.cell.height-lado)/2;
+        doc.setDrawColor(...ORANGE); doc.setLineWidth(.35);
+        for(let i=0;i<3;i++) doc.rect(x0+i*(lado+gap), y0, lado, lado);
+      }
+    },
+    didDrawPage: () => cabecalhoPDF(doc, 'Caderno de Erros Inteligente', sub)
+  });
+  rodapePDF(doc, 'Tipo de erro:  C = conteúdo (volte à lei seca)  ·  I = interpretação (comece pelo enunciado)  ·  P = pressa (leia todas as alternativas).  Revisões: marque um quadrinho a cada revisão feita, depois de 1, 7 e 30 dias.');
+  doc.save('modelo-caderno-de-erros-master5.pdf');
+}
+
+async function baixarExcel(){
+  const itens = filtrar();
+  if(db.length && !itens.length){ toast('Nenhum erro com esse filtro.'); return; }
+  toast('Gerando sua planilha...');
+  if(!(await libs('xlsx'))) return;
+  const X = window.XLSX;
+  const CAB = ['Matéria','Tema','O que a questão cobrou','Regra certa, com as minhas palavras','Artigo','Tipo de erro','Status','Próxima revisão','Errou de novo (vezes)','Registrado em'];
+  const linhas = itens.map(e => [e.materia, e.tema, e.pergunta||'', e.regra, e.artigo||'',
+    TIPOS[e.tipo].nome, e.dominado?'Dominado':'Revisão '+(e.etapa+1)+' de 3', e.dominado?'-':dataBR(e.proxima), e.reincidencias||0, dataBR(e.criado)]);
+  const ws = X.utils.aoa_to_sheet([CAB, ...linhas]);
+  ws['!cols'] = [22,26,40,60,18,15,15,15,12,14].map(w=>({wch:w}));
+  ws['!autofilter'] = {ref: X.utils.encode_range({s:{r:0,c:0}, e:{r:Math.max(linhas.length,1), c:CAB.length-1}})};
+  const wb = X.utils.book_new();
+  X.utils.book_append_sheet(wb, ws, 'Caderno de erros');
+  if(itens.length){
+    const res = [['Resumo do caderno - Master5 OAB'], ['Gerado em', dataBR(hoje())], [],
+      ['Matéria','Erros'], ...contar(itens, e=>e.materia), [],
+      ['Tipo de erro','Erros'], ...contar(itens, e=>TIPOS[e.tipo].nome), [],
+      ['Já dominados', itens.filter(e=>e.dominado).length], ['Em revisão', itens.filter(e=>!e.dominado).length]];
+    const ws2 = X.utils.aoa_to_sheet(res); ws2['!cols'] = [{wch:28},{wch:12}];
+    X.utils.book_append_sheet(wb, ws2, 'Resumo');
+  }
+  X.writeFile(wb, (itens.length ? 'meu-caderno-de-erros-'+hoje() : 'modelo-caderno-de-erros-master5') + '.xlsx');
+}
+document.getElementById('btnPDF').onclick = baixarPDF;
+document.getElementById('btnXLSX').onclick = baixarExcel;
+document.getElementById('btnModelo').onclick = baixarModelo;
+
+atualizarBadge();
+verificarAviso();
+</script>
+</body>
+</html>
